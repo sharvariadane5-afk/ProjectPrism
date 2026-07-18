@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Project</title>
+</head>
+
+<body>
+
+    <h2>Add Project</h2>
+
+    <form method="POST">
+
+        <input type="text" name="title" placeholder="Project Title" required><br><br>
+
+        <input type="text" name="department" placeholder="Department" required><br><br>
+
+        <input type="text" name="location" placeholder="Location" required><br><br>
+
+        <input type="number" name="budget" placeholder="Budget" required><br><br>
+
+        <input type="text" name="contractor" placeholder="Contractor" required><br><br>
+
+        <label>Start Date</label><br>
+        <input type="date" name="start_date"><br><br>
+
+        <label>End Date</label><br>
+        <input type="date" name="end_date"><br><br>
+
+        <select name="status">
+            <option>Ongoing</option>
+            <option>Completed</option>
+            <option>Delayed</option>
+        </select>
+
+        <br><br>
+
+        <textarea name="description" rows="5" cols="40" placeholder="Project Description"></textarea>
+
+        <br><br>
+
+        <button type="submit">Save Project</button>
+
+    </form>
+
+</body>
+
+</html>

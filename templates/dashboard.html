@@ -30,37 +30,33 @@ filename='css/style.css') }}">
 
 <div class="cards">
 
-<div class="card">
+<a href="/projects" style="text-decoration:none; color:inherit;">
+    <div class="card">
+        <h2>{{ total_projects }}</h2>
+        <p>Total Projects</p>
+    </div>
+</a>
 
-<h2>{{ total_projects }}</h2>
+<a href="/projects/Ongoing" style="text-decoration:none;color:inherit;">
+    <div class="card">
+        <h2>{{ ongoing }}</h2>
+        <p>Ongoing Projects</p>
+    </div>
+</a>
 
-<p>Total Projects</p>
+<a href="/projects/Completed" style="text-decoration:none;color:inherit;">
+    <div class="card">
+        <h2>{{ completed }}</h2>
+        <p>Completed Projects</p>
+    </div>
+</a>
 
-</div>
-
-<div class="card">
-
-<h2>{{ ongoing }}</h2>
-
-<p>Ongoing</p>
-
-</div>
-
-<div class="card">
-
-<h2>{{ completed }}</h2>
-
-<p>Completed</p>
-
-</div>
-
-<div class="card">
-
-<h2>{{ delayed }}</h2>
-
-<p>Delayed</p>
-
-</div>
+<a href="/projects/Delayed" style="text-decoration:none;color:inherit;">
+    <div class="card">
+        <h2>{{ delayed }}</h2>
+        <p>Delayed Projects</p>
+    </div>
+</a>
 
 </div>
 

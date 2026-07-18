@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>All Projects</title>
+</head>
+
+<body>
+
+<h1>Public Projects</h1>
+
+<table border="1" cellpadding="10">
+
+<tr>
+
+<th>ID</th>
+<th>Title</th>
+<th>Department</th>
+<th>Location</th>
+<th>Budget</th>
+<th>Status</th>
+
+</tr>
+
+{% for project in projects %}
+
+<tr>
+
+<td>{{ project.id }}</td>
+
+<td>
+    <a href="/project/{{ project.id }}">
+        {{ project.title }}
+    </a>
+</td>
+
+<td>{{ project.department }}</td>
+
+<td>{{ project.location }}</td>
+
+<td>{{ project.budget }}</td>
+
+<td>{{ project.status }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+
+</html>

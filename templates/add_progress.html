@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Progress</title>
+</head>
+
+<body>
+
+<h2>{{ project.title }}</h2>
+
+<form method="POST">
+
+<label>Progress (%)</label><br>
+
+<input
+type="number"
+name="progress"
+min="0"
+max="100"
+required>
+
+<br><br>
+
+<label>Date</label><br>
+
+<input
+type="date"
+name="update_date"
+required>
+
+<br><br>
+
+<label>Remarks</label><br>
+
+<textarea
+name="remarks"
+rows="5"
+cols="40"></textarea>
+
+<br><br>
+
+<button type="submit">
+
+Save Progress
+
+</button>
+
+</form>
+
+</body>
+
+</html>
