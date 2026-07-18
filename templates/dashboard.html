@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Dashboard</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',
+filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>Project Prism</h2>
+
+<a href="/logout">Logout</a>
+
+</div>
+
+<div class="container">
+
+<h1>Welcome {{ session["name"] }}</h1>
+
+<h3>{{ session["role"] }}</h3>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>{{ total_projects }}</h2>
+
+<p>Total Projects</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ ongoing }}</h2>
+
+<p>Ongoing</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ completed }}</h2>
+
+<p>Completed</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ delayed }}</h2>
+
+<p>Delayed</p>
+
+</div>
+
+</div>
+
+{% if session["role"]=="Officer" %}
+
+<h2>Officer Panel</h2>
+
+<p>You can add and update projects.</p>
+
+{% elif session["role"]=="Citizen" %}
+
+<h2>Citizen Panel</h2>
+
+<p>You can view projects and report issues.</p>
+
+{% else %}
+
+<h2>Admin Panel</h2>
+
+<p>You can manage all users and projects.</p>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
