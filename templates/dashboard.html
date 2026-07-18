@@ -4,83 +4,84 @@
 
 <head>
 
-<title>Dashboard</title>
+    <title>Dashboard</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static',
+    <link rel="stylesheet" href="{{ url_for('static',
 filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<div class="navbar">
+    <div class="navbar">
 
-<h2>Project Prism</h2>
+        <h2>Project Prism</h2>
 
-<a href="/logout">Logout</a>
+        <a href="/logout">Logout</a>
 
-</div>
-
-<div class="container">
-
-<h1>Welcome {{ session["name"] }}</h1>
-
-<h3>{{ session["role"] }}</h3>
-
-<div class="cards">
-
-<a href="/projects" style="text-decoration:none; color:inherit;">
-    <div class="card">
-        <h2>{{ total_projects }}</h2>
-        <p>Total Projects</p>
     </div>
-</a>
 
-<a href="/projects/Ongoing" style="text-decoration:none;color:inherit;">
-    <div class="card">
-        <h2>{{ ongoing }}</h2>
-        <p>Ongoing Projects</p>
+    <div class="container">
+
+        <h1>Welcome {{ session["name"] }}</h1>
+
+        <h3>{{ session["role"] }}</h3>
+
+        <div class="dashboard-cards">
+
+            <a href="/projects" class="card-link">
+                <div class="card">
+                    <h2>{{ total_projects }}</h2>
+                    <p>Total Projects</p>
+                </div>
+            </a>
+
+            <a href="/projects/status/Ongoing" class="card-link">
+                <div class="card">
+                    <h2>{{ ongoing }}</h2>
+                    <p>Ongoing</p>
+                </div>
+            </a>
+
+            <a href="/projects/status/Completed" class="card-link">
+                <div class="card">
+                    <h2>{{ completed }}</h2>
+                    <p>Completed</p>
+                </div>
+            </a>
+
+            <a href="/projects/status/Delayed" class="card-link">
+                <div class="card">
+                    <h2>{{ delayed }}</h2>
+                    <p>Delayed</p>
+                </div>
+            </a>
+
+        </div>
+
     </div>
-</a>
 
-<a href="/projects/Completed" style="text-decoration:none;color:inherit;">
-    <div class="card">
-        <h2>{{ completed }}</h2>
-        <p>Completed Projects</p>
-    </div>
-</a>
+    {% if session["role"]=="Officer" %}
 
-<a href="/projects/Delayed" style="text-decoration:none;color:inherit;">
-    <div class="card">
-        <h2>{{ delayed }}</h2>
-        <p>Delayed Projects</p>
-    </div>
-</a>
+    <h2>Officer Panel</h2>
 
-</div>
+    <p>You can add and update projects.</p>
 
-{% if session["role"]=="Officer" %}
+    {% elif session["role"]=="Citizen" %}
 
-<h2>Officer Panel</h2>
+    <h2>Citizen Panel</h2>
 
-<p>You can add and update projects.</p>
+    <p>You can view projects and report issues.</p>
 
-{% elif session["role"]=="Citizen" %}
+    {% else %}
 
-<h2>Citizen Panel</h2>
+    <h2>Admin Panel</h2>
 
-<p>You can view projects and report issues.</p>
+    <p>You can manage all users and projects.</p>
 
-{% else %}
+    {% endif %}
 
-<h2>Admin Panel</h2>
 
-<p>You can manage all users and projects.</p>
-
-{% endif %}
-
-</div>
 
 </body>
 

@@ -81,12 +81,14 @@ def view_projects():
 
     return render_template(
         "projects.html",
-        projects=projects
+        projects=projects,
+        title="All Projects"
     )
+
 
 # ---------------- FILTER PROJECTS ---------------- #
 
-@project_bp.route("/projects/<status>")
+@project_bp.route("/projects/status/<status>")
 def filter_projects(status):
 
     if "user_id" not in session:
@@ -97,7 +99,7 @@ def filter_projects(status):
     projects = conn.execute("""
         SELECT *
         FROM projects
-        WHERE status = ?
+        WHERE status=?
         ORDER BY id DESC
     """, (status,)).fetchall()
 
@@ -105,7 +107,8 @@ def filter_projects(status):
 
     return render_template(
         "projects.html",
-        projects=projects
+        projects=projects,
+        title=f"{status} Projects"
     )
 
 # ---------------- PROJECT DETAILS ---------------- #
