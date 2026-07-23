@@ -92,6 +92,16 @@ def dashboard():
         "SELECT COUNT(*) FROM projects WHERE status='Delayed'"
     ).fetchone()[0]
 
+    pending = conn.execute(
+        "SELECT COUNT(*) FROM projects WHERE approval_status='Pending'"
+    ).fetchone()[0]
+
+    recent_projects = conn.execute("""
+    SELECT title, status
+    FROM projects
+    ORDER BY id DESC
+    LIMIT 5
+    """).fetchall()
     conn.close()
 
     return render_template(
@@ -103,8 +113,95 @@ def dashboard():
 
         ongoing=ongoing,
 
-        delayed=delayed
+        delayed=delayed,
+
+        pending=pending,
+
+        recent_projects=recent_projects
     )
+
+# ---------------- USERS ---------------- #
+@auth_bp.route("/users")
+def users():
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    users = conn.execute(
+        "SELECT * FROM users ORDER BY id"
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "users.html",
+        users=users
+    )
+
+# ---------------- EDIT USER ---------------- #
+@auth_bp.route("/user/<int:user_id>/edit", methods=["GET","POST"])
+def edit_user(user_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    if request.method == "POST":
+
+        role = request.form["role"]
+
+        conn.execute(
+            "UPDATE users SET role=? WHERE id=?",
+            (role, user_id)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/users")
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE id=?",
+        (user_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template(
+        "edit_user.html",
+        user=user
+    )
+
+# ---------------- DELETE USER---------------- #
+@auth_bp.route("/user/<int:user_id>/delete")
+def delete_user(user_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    conn.execute(
+        "DELETE FROM users WHERE id=?",
+        (user_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/users")
 
 # ---------------- LOGOUT ---------------- #
 
@@ -114,3 +211,4 @@ def logout():
     session.clear()
 
     return redirect("/")
+

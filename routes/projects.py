@@ -27,31 +27,33 @@ def add_project():
         description = request.form["description"]
 
         conn = get_db()
-
         conn.execute("""
-            INSERT INTO projects
-            (
-                title,
-                department,
-                location,
-                budget,
-                contractor,
-                start_date,
-                end_date,
-                status,
-                description
-            )
-            VALUES (?,?,?,?,?,?,?,?,?)
-        """, (
-            title,
-            department,
-            location,
-            budget,
-            contractor,
-            start_date,
-            end_date,
-            status,
-            description
+        INSERT INTO projects
+        (title,
+        department,
+        location,
+        budget,
+        contractor,
+        start_date,
+        end_date,
+        status,
+        approval_status,
+        description)
+
+        VALUES(?,?,?,?,?,?,?,?,?,?)
+        """,
+
+        (
+        title,
+        department,
+        location,
+        budget,
+        contractor,
+        start_date,
+        end_date,
+        status,
+        "Pending",
+        description
         ))
 
         conn.commit()
@@ -60,6 +62,90 @@ def add_project():
         return redirect("/dashboard")
 
     return render_template("add_project.html")
+
+# ---------------- SEARCH PROJECTS ---------------- #
+
+@project_bp.route("/search_projects")
+def search_projects():
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    keyword = request.args.get("keyword", "")
+    status = request.args.get("status", "")
+
+    conn = get_db()
+
+    if keyword and status:
+
+        projects = conn.execute("""
+
+        SELECT *
+        FROM projects
+        WHERE title LIKE ?
+        AND status=?
+
+        ORDER BY id DESC
+
+        """,
+
+        ('%' + keyword + '%', status)
+
+        ).fetchall()
+
+    elif keyword:
+
+        projects = conn.execute("""
+
+        SELECT *
+        FROM projects
+        WHERE title LIKE ?
+
+        ORDER BY id DESC
+
+        """,
+
+        ('%' + keyword + '%',)
+
+        ).fetchall()
+
+    elif status:
+
+        projects = conn.execute("""
+
+        SELECT *
+        FROM projects
+        WHERE status=?
+
+        ORDER BY id DESC
+
+        """,
+
+        (status,)
+
+        ).fetchall()
+
+    else:
+
+        projects = conn.execute("""
+
+        SELECT *
+        FROM projects
+        ORDER BY id DESC
+
+        """).fetchall()
+
+    conn.close()
+
+    return render_template(
+
+        "projects.html",
+
+        projects=projects,
+
+        title="Search Results"
+
+    )
 
 # ---------------- VIEW PROJECTS ---------------- #
 
@@ -72,8 +158,8 @@ def view_projects():
     conn = get_db()
 
     projects = conn.execute("""
-        SELECT *
-        FROM projects
+        SELECT * FROM projects
+        WHERE approval_status='Approved'
         ORDER BY id DESC
     """).fetchall()
 
@@ -85,6 +171,79 @@ def view_projects():
         title="All Projects"
     )
 
+
+# ---------------- APPROVE PROJECT ---------------- #
+@project_bp.route("/project/<int:project_id>/approve")
+def approve_project(project_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    conn.execute("""
+    UPDATE projects
+    SET approval_status='Approved'
+    WHERE id=?
+    """, (project_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/pending-projects")
+
+
+# ---------------- REJECT PROJECT ---------------- #
+@project_bp.route("/project/<int:project_id>/reject")
+def reject_project(project_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    conn.execute("""
+    UPDATE projects
+    SET approval_status='Rejected'
+    WHERE id=?
+    """, (project_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/pending-projects")
+
+# ---------------- PENDING PROJECTS ---------------- #
+
+@project_bp.route("/pending-projects")
+def pending_projects():
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    if session["role"] != "Admin":
+        return "Access Denied"
+
+    conn = get_db()
+
+    projects = conn.execute("""
+    SELECT *
+    FROM projects
+    WHERE approval_status='Pending'
+    """).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "pending_projects.html",
+        projects=projects
+    )
 
 # ---------------- FILTER PROJECTS ---------------- #
 
@@ -150,6 +309,69 @@ def project_details(project_id):
         project=project,
         updates=updates
     )
+
+# ---------------- EDIT PROJECT ---------------- #
+
+@project_bp.route("/project/<int:project_id>/edit", methods=["GET","POST"])
+def edit_project(project_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    conn = get_db()
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        description = request.form["description"]
+        status = request.form["status"]
+
+        conn.execute(
+            """
+            UPDATE projects
+            SET title=?,
+                description=?,
+                status=?
+            WHERE id=?
+            """,
+            (title, description, status, project_id)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect(f"/project/{project_id}")
+
+    project = conn.execute(
+        "SELECT * FROM projects WHERE id=?",
+        (project_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template(
+        "edit_project.html",
+        project=project
+    )
+
+# ---------------- DELETE PROJECT ---------------- #
+@project_bp.route("/project/<int:project_id>/delete", methods=["POST"])
+def delete_project(project_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    conn = get_db()
+
+    conn.execute(
+        "DELETE FROM projects WHERE id=?",
+        (project_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/projects")
 
 # ---------------- ADD PROGRESS ---------------- #
 

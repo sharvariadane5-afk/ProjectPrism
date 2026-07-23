@@ -51,10 +51,28 @@ def create_tables():
 
         status TEXT,
 
+        approval_status TEXT DEFAULT 'Pending',
+
         description TEXT
 
     )
     """)
+
+    conn.execute("""
+     CREATE TABLE IF NOT EXISTS documents(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        project_id INTEGER,
+
+        filename TEXT,
+
+        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY(project_id) REFERENCES projects(id)
+
+    );
+    """)             
 
     # PROGRESS UPDATES
     conn.execute("""
@@ -74,6 +92,39 @@ def create_tables():
 
     )
     """)
+
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS reports(
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            project_id INTEGER,
+
+            user_id INTEGER,
+
+            issue TEXT,
+
+            description TEXT,
+
+            status TEXT DEFAULT 'Pending',
+
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(project_id) REFERENCES projects(id),
+
+            FOREIGN KEY(user_id) REFERENCES users(id)
+
+    )
+    """)
+
+    try:
+        conn.execute("""
+            ALTER TABLE projects
+            ADD COLUMN approval_status TEXT DEFAULT 'Pending'
+        """)
+    except:
+        pass
 
     conn.commit()
 

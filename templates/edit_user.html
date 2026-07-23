@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User Role</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h2>Edit User Role</h2>
+
+<form method="POST">
+
+<p>Name: {{ user["name"] }}</p>
+
+<p>Email: {{ user["email"] }}</p>
+
+<label>Role</label>
+
+<select name="role">
+    <option value="Citizen" {% if user["role"]=="Citizen" %}selected{% endif %}>Citizen</option>
+
+    <option value="Officer" {% if user["role"]=="Officer" %}selected{% endif %}>Officer</option>
+
+    <option value="Admin" {% if user["role"]=="Admin" %}selected{% endif %}>Admin</option>
+</select>
+
+<br><br>
+
+<button type="submit">Save Changes</button>
+
+</form>
+
+<br>
+
+<a href="/users">Back</a>
+
+</div>
+
+</body>
+</html>

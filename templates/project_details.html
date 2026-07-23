@@ -95,6 +95,45 @@
 
 </table>
 
+{% if session["role"]=="Citizen" %}
+
+<a href="/report/{{ project.id }}">
+
+<button>
+
+Report Issue
+
+</button>
+
+</a>
+
+{% endif %}
+
+<a href="/project/{{ project.id }}/upload">
+
+<button>
+
+Upload Document
+
+</button>
+
+</a>
+
+<a href="/project/{{ project['id'] }}/edit">
+    <button>Edit Project</button>
+</a>
+
+
+<form action="/project/{{ project['id'] }}/delete" method="POST"
+      onsubmit="return confirm('Are you sure you want to delete this project?');">
+
+    <button style="background:red;color:white;">
+        Delete Project
+    </button>
+
+</form>
+
+
 </body>
 
 </html>

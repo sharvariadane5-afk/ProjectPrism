@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Registered Users</h1>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Action</th>
+</tr>
+
+{% for user in users %}
+
+<tr>
+
+<td>{{ user["id"] }}</td>
+
+<td>{{ user["name"] }}</td>
+
+<td>{{ user["email"] }}</td>
+
+<td>{{ user["role"] }}</td>
+
+<td>
+<a href="/user/{{ user['id'] }}/edit">
+<button>Edit Role</button>
+</a>
+
+<a href="/user/{{ user['id'] }}/delete"
+   onclick="return confirm('Delete this user?')">
+    <button>Delete</button>
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

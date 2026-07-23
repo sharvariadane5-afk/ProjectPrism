@@ -23,7 +23,15 @@ filename='css/style.css') }}">
 
     <div class="container">
 
-        <h1>Welcome {{ session["name"] }}</h1>
+        <div class="card">
+
+            <h1>Welcome, {{ session["name"] }}</h1>
+
+            <p>Role : {{ session["role"] }}</p>
+
+            <p>Project Prism Management Dashboard</p>
+
+        </div>
 
         <h3>{{ session["role"] }}</h3>
 
@@ -67,6 +75,38 @@ filename='css/style.css') }}">
 
     <p>You can add and update projects.</p>
 
+    <div class="dashboard-grid">
+
+        <a href="/add_project" class="card-link">
+            <div class="card">
+                <h3>➕ Add Project</h3>
+                <p>Create a new government project.</p>
+            </div>
+        </a>
+
+        <a href="/projects" class="card-link">
+            <div class="card">
+                <h3>📂 View Projects</h3>
+                <p>Manage all projects.</p>
+            </div>
+        </a>
+
+        <a href="/reports" class="card-link">
+            <div class="card">
+                <h3>🚩 Citizen Reports</h3>
+                <p>View reported issues.</p>
+            </div>
+        </a>
+
+        <a href="/analytics" class="card-link">
+            <div class="card">
+                <h3>📊 Analytics</h3>
+                <p>View project statistics.</p>
+            </div>
+        </a>
+
+    </div>
+
     {% elif session["role"]=="Citizen" %}
 
     <h2>Citizen Panel</h2>
@@ -79,9 +119,56 @@ filename='css/style.css') }}">
 
     <p>You can manage all users and projects.</p>
 
+    <a href="/users">
+        <button>Manage Users</button>
+    </a>
+
+    <a href="/pending-projects" class="card-link">
+        <div class="card">
+            <h2>Pending Projects</h2>
+            <p>Approve or Reject Projects</p>
+        </div>
+    </a>
+
     {% endif %}
 
+    <h2>Recent Projects</h2>
 
+    <table>
+        <tr>
+            <th>Project</th>
+            <th>Status</th>
+        </tr>
+
+        {% for project in recent_projects %}
+        <tr>
+            <td>{{ project["title"] }}</td>
+            <td>{{ project["status"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Quick Actions</h2>
+
+    <a href="/add_project">
+        <button>Add Project</button>
+    </a>
+
+    <a href="/projects">
+        <button>View Projects</button>
+    </a>
+
+    <a href="/reports">
+        <button>View Reports</button>
+    </a>
+
+    <a href="/analytics">
+        <button>Analytics</button>
+    </a>
+
+    {% if session["role"]=="Admin" %}
+
+    {% endif %}
 
 </body>
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Pending Projects</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static',filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Pending Projects</h1>
+
+<table border="1">
+
+<tr>
+
+<th>Title</th>
+
+<th>Department</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+{% for project in projects %}
+
+<tr>
+
+<td>{{ project["title"] }}</td>
+
+<td>{{ project["department"] }}</td>
+
+<td>{{ project["approval_status"] }}</td>
+
+<td>
+
+<a href="/project/{{ project['id'] }}/approve">
+
+<button>Approve</button>
+
+</a>
+
+<a href="/project/{{ project['id'] }}/reject">
+
+<button style="background:red;">
+Reject
+</button>
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+
+</html>

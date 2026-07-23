@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Citizen Reports</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Citizen Reports</h1>
+
+<table border="1" cellpadding="10">
+
+<tr>
+
+<th>ID</th>
+<th>Project</th>
+<th>Issue</th>
+<th>Description</th>
+<th>Status</th>
+<th>Date</th>
+<th>Action</th>
+
+</tr>
+
+{% for report in reports %}
+
+<tr>
+
+<td>{{ report.id }}</td>
+
+<td>{{ report.title }}</td>
+
+<td>{{ report.issue }}</td>
+
+<td>{{ report.description }}</td>
+
+<td>{{ report.status }}</td>
+
+<td>{{ report.created_at }}</td>
+
+<td>
+
+<a href="/report/{{ report.id }}/resolve">
+
+<button>
+
+Resolve
+
+</button>
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+
+</html>

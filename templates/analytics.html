@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Analytics</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Project Analytics</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h2>{{ total_projects }}</h2>
+<p>Total Projects</p>
+</div>
+
+<div class="card">
+<h2>{{ ongoing }}</h2>
+<p>Ongoing</p>
+</div>
+
+<div class="card">
+<h2>{{ completed }}</h2>
+<p>Completed</p>
+</div>
+
+<div class="card">
+<h2>{{ delayed }}</h2>
+<p>Delayed</p>
+</div>
+
+<div class="card">
+<h2>{{ total_reports }}</h2>
+<p>Citizen Reports</p>
+</div>
+
+</div>
+
+<br>
+
+<a href="/dashboard">
+<button>Back to Dashboard</button>
+</a>
+
+</div>
+
+</body>
+
+</html>
